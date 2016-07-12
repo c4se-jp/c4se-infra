@@ -8,6 +8,18 @@ provider "aws" {
   secret_key = "${var.aws_secret_key}"
 }
 
+resource "aws_route53_zone" "primary" {
+  name = "c4se.jp"
+}
+
+resource "aws_route53_record" "root_a_record" {
+  name = "c4se.jp"
+  records = ["219.94.162.102"]
+  ttl = "300"
+  type = "A"
+  zone_id = "${aws_route53_zone.primary.zone_id}"
+}
+
 resource "aws_iam_role" "lambda_heartbeat_ok_exec_role" {
   assume_role_policy = "${file("files/lambda_heartbeat_ok_exec_role_policy.json")}"
   name = "lambda_heartbeat_ok_exec_role"
