@@ -1,3 +1,5 @@
+require 'json'
+
 task :default
 
 def select_aws_lambda_target
@@ -30,4 +32,13 @@ namespace :terraform do
   task :apply do
     Bundler.with_clean_env { sh 'terraform apply' }
   end
+end
+
+desc 'Deploy API Gateway to prod.'
+task :deploy_apigateway do
+  apis = %w(heartbeat_api)
+  api = `echo #{apis.join "\n"} | peco`.chomp
+  next if api.empty?
+  api_id = JSON.parse(`aws apigateway get-rest-apis --output json`)['items'].detect { |rest_api| rest_api['name'] == api }['id']
+  sh "aws apigateway create-deployment --rest-api-id #{api_id} --stage-name prod"
 end
