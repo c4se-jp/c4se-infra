@@ -25,18 +25,26 @@ end
 namespace :terraform do
   desc 'Dry run Terraform.'
   task :plan do
-    Bundler.with_clean_env { sh 'terraform plan' }
+    Dir.chdir 'terraform' do
+      Bundler.with_clean_env { sh 'terraform plan -out=terraform.tfplan' }
+    end
   end
 
   desc 'Run Terraform.'
   task :apply do
-    Bundler.with_clean_env { sh 'terraform apply' }
+    Dir.chdir 'terraform' do
+      begin
+        Bundler.with_clean_env { sh 'terraform apply terraform.tfplan' }
+      ensure
+        sh 'rm terraform.tfplan'
+      end
+    end
   end
 end
 
 desc 'Deploy API Gateway to prod.'
 task :deploy_apigateway do
-  apis = %w(heartbeat_api)
+  apis = %w(heartbeat)
   api = `echo #{apis.join "\n"} | peco`.chomp
   next if api.empty?
   api_id = JSON.parse(`aws apigateway get-rest-apis --output json`)['items'].detect { |rest_api| rest_api['name'] == api }['id']
