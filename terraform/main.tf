@@ -1,10 +1,16 @@
 variable "aws_access_key" {}
 
+variable "aws_account_id" {}
+
+variable "aws_region" {
+  default = "ap-northeast-1"
+}
+
 variable "aws_secret_key" {}
 
 provider "aws" {
   access_key = "${var.aws_access_key}"
-  region = "ap-northeast-1"
+  region = "${var.aws_region}"
   secret_key = "${var.aws_secret_key}"
 }
 
