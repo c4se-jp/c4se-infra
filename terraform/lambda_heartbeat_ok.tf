@@ -24,7 +24,7 @@ module "aws_lambda_function_for_apigateway_heartbeat_ok" {
   handler = "main.main"
   memory_size = 128
   prod_function_version = "3"
-  role = "${aws_iam_role.lambda_crud_random_exec.arn}"
+  role = "${aws_iam_role.lambda_heartbeat_ok_exec.arn}"
   runtime = "python2.7"
   timeout = 3
 }
