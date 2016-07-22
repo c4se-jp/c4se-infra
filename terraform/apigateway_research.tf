@@ -23,24 +23,28 @@ resource "aws_api_gateway_deployment" "research_prod" {
   }
 }
 
+# /hertbeat
 resource "aws_api_gateway_resource" "research_heartbeat" {
   parent_id = "${aws_api_gateway_rest_api.research.root_resource_id}"
   path_part = "heartbeat"
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
 }
 
+# /hertbeat/ok
 resource "aws_api_gateway_resource" "research_heartbeat_ok" {
   parent_id = "${aws_api_gateway_resource.research_heartbeat.id}"
   path_part = "ok"
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
 }
 
+# /random
 resource "aws_api_gateway_resource" "research_random" {
   parent_id = "${aws_api_gateway_rest_api.research.root_resource_id}"
   path_part = "random"
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
 }
 
+# /random/{id}
 resource "aws_api_gateway_resource" "research_random_id" {
   parent_id = "${aws_api_gateway_resource.research_random.id}"
   path_part = "{id}"
@@ -141,7 +145,7 @@ EOF
   resource_id = "${aws_api_gateway_resource.research_random_id.id}"
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
   type = "AWS"
-  uri = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.aws_region}:${var.aws_account_id}:function:${aws_lambda_function.get_random.function_name}:$${stageVariables.stage}/invocations"
+  uri = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.aws_region}:${var.aws_account_id}:function:${module.aws_lambda_function_for_apigateway_get_random.function_name}:$${stageVariables.stage}/invocations"
 }
 
 resource "aws_api_gateway_method_response" "research_random_id_get_200" {
@@ -232,7 +236,7 @@ EOF
   resource_id = "${aws_api_gateway_resource.research_random_id.id}"
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
   type = "AWS"
-  uri = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.aws_region}:${var.aws_account_id}:function:${aws_lambda_function.put_random.function_name}:$${stageVariables.stage}/invocations"
+  uri = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.aws_region}:${var.aws_account_id}:function:${module.aws_lambda_function_for_apigateway_put_random.function_name}:$${stageVariables.stage}/invocations"
 }
 
 resource "aws_api_gateway_method_response" "research_random_id_put_200" {

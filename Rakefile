@@ -35,7 +35,10 @@ namespace :build do
   desc 'Dry run Terraform.'
   task :terraform do
     Dir.chdir "#{__dir__}/terraform" do
-      Bundler.with_clean_env { sh 'terraform plan -out=terraform.tfplan' }
+      Bundler.with_clean_env do
+        sh 'terraform get'
+        sh 'terraform plan -out=terraform.tfplan'
+      end
     end
   end
 end
@@ -86,6 +89,9 @@ namespace :test do
   task :lint do
     sh 'bundle exec rubocop'
     sh 'flake8 aws_lambda'
-    Dir.chdir('terraform') { sh 'terraform validate' }
+    Dir.chdir 'terraform' do
+      sh 'terraform validate'
+      Dir['modules/*/'].each { |dir| sh "terraform validate #{dir}" }
+    end
   end
 end

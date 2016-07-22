@@ -10,6 +10,6 @@ API Gatewayの更新手順
 4. (API Gatewayの設定を更新した場合は) `bundle exec rake deploy:aws_apigateway` でstagingの設定をデプロイする
 5. (Lambdaのコードを更新した場合は)
    - `bundle exec deploy:aws_lambda` で、表示されたVersionをメモする
-   - 上でメモしたVersionを `var.xxx_prod_function_version` に設定する
+   - 上でメモしたVersionを `prod_function_version` に設定する
    - `bundle exec rake build:terraform` の後に `bundle exec rake deploy:terraform`
 6. `bundle exec rake deploy:aws_apigateway` でproductionの設定をデプロイする
