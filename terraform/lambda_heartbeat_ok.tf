@@ -20,12 +20,6 @@ EOF
   name = "lambda_heartbeat_ok_exec"
 }
 
-resource "aws_iam_policy_attachment" "lambda_heartbeat_ok_exec_AWSLambdaExecute" {
-  name = "lambda_heartbeat_ok_exec_AWSLambdaExecute"
-  policy_arn = "arn:aws:iam::aws:policy/AWSLambdaExecute"
-  roles = ["${aws_iam_role.lambda_heartbeat_ok_exec.name}"]
-}
-
 resource "aws_lambda_function" "heartbeat_ok" {
   description = "Dummy heartbeat endpoint."
   filename = "../aws_lambda/heartbeat_ok.zip"

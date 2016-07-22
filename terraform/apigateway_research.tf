@@ -107,6 +107,13 @@ EOF
 resource "aws_api_gateway_method" "research_random_id_get" {
   authorization = "NONE"
   http_method = "GET"
+  request_parameters_in_json = <<EOF
+{
+  "method.request.path.id": true,
+  "method.request.querystring.dummy1": true,
+  "method.request.querystring.dummy2": true
+}
+EOF
   resource_id = "${aws_api_gateway_resource.research_random_id.id}"
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
 }
@@ -114,9 +121,18 @@ resource "aws_api_gateway_method" "research_random_id_get" {
 resource "aws_api_gateway_integration" "research_random_id_get" {
   http_method = "${aws_api_gateway_method.research_random_id_get.http_method}"
   integration_http_method = "POST"
+  request_parameters_in_json = <<EOF
+{
+  "integration.request.path.id": "method.request.path.id",
+  "integration.request.querystring.dummy1": "method.request.querystring.dummy1",
+  "integration.request.querystring.dummy2": "method.request.querystring.dummy2"
+}
+EOF
   request_templates = {
     "application/json" = <<EOF
 {
+  "dummy1": "$input.params('dummy1')",
+  "dummy2": "$input.params('dummy2')",
   "id": "$input.params('id')",
   "stage": "$stageVariables.stage"
 }
@@ -135,12 +151,58 @@ resource "aws_api_gateway_method_response" "research_random_id_get_200" {
   status_code = "200"
 }
 
+resource "aws_api_gateway_method_response" "research_random_id_get_400" {
+  http_method = "${aws_api_gateway_method.research_random_id_get.http_method}"
+  resource_id = "${aws_api_gateway_resource.research_random_id.id}"
+  rest_api_id = "${aws_api_gateway_rest_api.research.id}"
+  status_code = "400"
+}
+
+resource "aws_api_gateway_method_response" "research_random_id_get_500" {
+  http_method = "${aws_api_gateway_method.research_random_id_get.http_method}"
+  resource_id = "${aws_api_gateway_resource.research_random_id.id}"
+  rest_api_id = "${aws_api_gateway_rest_api.research.id}"
+  status_code = "500"
+}
+
 resource "aws_api_gateway_integration_response" "research_random_id_get_200" {
   depends_on = ["aws_api_gateway_integration.research_random_id_get"]
   http_method = "${aws_api_gateway_method.research_random_id_get.http_method}"
   resource_id = "${aws_api_gateway_resource.research_random_id.id}"
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
   status_code = "${aws_api_gateway_method_response.research_random_id_get_200.status_code}"
+}
+
+resource "aws_api_gateway_integration_response" "research_random_id_get_400" {
+  depends_on = ["aws_api_gateway_integration.research_random_id_get"]
+  http_method = "${aws_api_gateway_method.research_random_id_get.http_method}"
+  resource_id = "${aws_api_gateway_resource.research_random_id.id}"
+  response_templates = {
+    "application/json" = <<EOF
+{
+  "error": "$input.path('$.errorMessage').substring(5)"
+}
+EOF
+  }
+  rest_api_id = "${aws_api_gateway_rest_api.research.id}"
+  selection_pattern = "400:.+"
+  status_code = "${aws_api_gateway_method_response.research_random_id_get_400.status_code}"
+}
+
+resource "aws_api_gateway_integration_response" "research_random_id_get_500" {
+  depends_on = ["aws_api_gateway_integration.research_random_id_get"]
+  http_method = "${aws_api_gateway_method.research_random_id_get.http_method}"
+  resource_id = "${aws_api_gateway_resource.research_random_id.id}"
+  response_templates = {
+    "application/json" = <<EOF
+{
+  "error": "$input.path('$.errorMessage')"
+}
+EOF
+  }
+  rest_api_id = "${aws_api_gateway_rest_api.research.id}"
+  selection_pattern = "(?<!\\d{3}: ).+"
+  status_code = "${aws_api_gateway_method_response.research_random_id_get_500.status_code}"
 }
 
 # }}} GET /random/{id}
@@ -160,6 +222,8 @@ resource "aws_api_gateway_integration" "research_random_id_put" {
   request_templates = {
     "application/json" = <<EOF
 {
+  "dummy1": "$input.path('$.dummy1')",
+  "dummy2": "$input.path('$.dummy2')",
   "id": "$input.params('id')",
   "stage": "$stageVariables.stage"
 }
@@ -178,12 +242,57 @@ resource "aws_api_gateway_method_response" "research_random_id_put_200" {
   status_code = "200"
 }
 
+resource "aws_api_gateway_method_response" "research_random_id_put_400" {
+  http_method = "${aws_api_gateway_method.research_random_id_put.http_method}"
+  resource_id = "${aws_api_gateway_resource.research_random_id.id}"
+  rest_api_id = "${aws_api_gateway_rest_api.research.id}"
+  status_code = "400"
+}
+
+resource "aws_api_gateway_method_response" "research_random_id_put_500" {
+  http_method = "${aws_api_gateway_method.research_random_id_put.http_method}"
+  resource_id = "${aws_api_gateway_resource.research_random_id.id}"
+  rest_api_id = "${aws_api_gateway_rest_api.research.id}"
+  status_code = "500"
+}
+
 resource "aws_api_gateway_integration_response" "research_random_id_put_200" {
   depends_on = ["aws_api_gateway_integration.research_random_id_put"]
   http_method = "${aws_api_gateway_method.research_random_id_put.http_method}"
   resource_id = "${aws_api_gateway_resource.research_random_id.id}"
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
   status_code = "${aws_api_gateway_method_response.research_random_id_put_200.status_code}"
+}
+resource "aws_api_gateway_integration_response" "research_random_id_put_400" {
+  depends_on = ["aws_api_gateway_integration.research_random_id_put"]
+  http_method = "${aws_api_gateway_method.research_random_id_put.http_method}"
+  resource_id = "${aws_api_gateway_resource.research_random_id.id}"
+  response_templates = {
+    "application/json" = <<EOF
+{
+  "error": "$input.path('$.errorMessage').substring(5)"
+}
+EOF
+  }
+  rest_api_id = "${aws_api_gateway_rest_api.research.id}"
+  selection_pattern = "400:.+"
+  status_code = "${aws_api_gateway_method_response.research_random_id_put_400.status_code}"
+}
+
+resource "aws_api_gateway_integration_response" "research_random_id_put_500" {
+  depends_on = ["aws_api_gateway_integration.research_random_id_put"]
+  http_method = "${aws_api_gateway_method.research_random_id_put.http_method}"
+  resource_id = "${aws_api_gateway_resource.research_random_id.id}"
+  response_templates = {
+    "application/json" = <<EOF
+{
+  "error": "$input.path('$.errorMessage')"
+}
+EOF
+  }
+  rest_api_id = "${aws_api_gateway_rest_api.research.id}"
+  selection_pattern = "(?<!\\d{3}: ).+"
+  status_code = "${aws_api_gateway_method_response.research_random_id_put_500.status_code}"
 }
 
 # }}} PUT /random/{id}

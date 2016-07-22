@@ -1,9 +1,9 @@
 variable "get_random_prod_function_version" {
-  default = "1"
+  default = "2"
 }
 
 variable "put_random_prod_function_version" {
-  default = "1"
+  default = "2"
 }
 
 resource "aws_iam_role" "lambda_crud_random_exec" {
@@ -22,12 +22,6 @@ resource "aws_iam_role" "lambda_crud_random_exec" {
 }
 EOF
   name = "lambda_crud_random_exec"
-}
-
-resource "aws_iam_policy_attachment" "lambda_crud_random_exec_AWSLambdaExecute" {
-  name = "lambda_crud_random_exec_AWSLambdaExecute"
-  policy_arn = "arn:aws:iam::aws:policy/AWSLambdaExecute"
-  roles = ["${aws_iam_role.lambda_crud_random_exec.name}"]
 }
 
 resource "aws_iam_role_policy" "lambda_crud_random_exec" {
