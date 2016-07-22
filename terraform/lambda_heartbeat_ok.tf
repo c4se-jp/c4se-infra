@@ -1,7 +1,3 @@
-variable "heartbeat_ok_prod_function_version" {
-  default = "2"
-}
-
 resource "aws_iam_role" "lambda_heartbeat_ok_exec" {
   assume_role_policy = <<EOF
 {
@@ -20,44 +16,15 @@ EOF
   name = "lambda_heartbeat_ok_exec"
 }
 
-resource "aws_lambda_function" "heartbeat_ok" {
-  description = "Dummy heartbeat endpoint."
+module "aws_lambda_function_for_apigateway_heartbeat_ok" {
+  source = "./modules/aws_lambda_function_for_apigateway"
+  description = "Get the code."
   filename = "../aws_lambda/heartbeat_ok.zip"
   function_name = "heartbeat_ok"
   handler = "main.main"
   memory_size = 128
-  role = "${aws_iam_role.lambda_heartbeat_ok_exec.arn}"
+  prod_function_version = "3"
+  role = "${aws_iam_role.lambda_crud_random_exec.arn}"
   runtime = "python2.7"
-  source_code_hash = "${base64sha256(file("../aws_lambda/heartbeat_ok.zip"))}"
   timeout = 3
-}
-
-resource "aws_lambda_alias" "heartbeat_ok_staging" {
-  description = "staging"
-  function_name = "${aws_lambda_function.heartbeat_ok.arn}"
-  function_version = "$LATEST"
-  name = "staging"
-}
-
-resource "aws_lambda_alias" "heartbeat_ok_prod" {
-  description = "production"
-  function_name = "${aws_lambda_function.heartbeat_ok.arn}"
-  function_version = "${var.heartbeat_ok_prod_function_version}"
-  name = "prod"
-}
-
-resource "aws_lambda_permission" "heartbeat_ok_staging_apigateway" {
-  action = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.heartbeat_ok.function_name}"
-  principal = "apigateway.amazonaws.com"
-  qualifier = "${aws_lambda_alias.heartbeat_ok_staging.name}"
-  statement_id = "heartbeat_ok_staging_apigateway"
-}
-
-resource "aws_lambda_permission" "heartbeat_ok_prod_apigateway" {
-  action = "lambda:InvokeFunction"
-  function_name = "${aws_lambda_function.heartbeat_ok.function_name}"
-  principal = "apigateway.amazonaws.com"
-  qualifier = "${aws_lambda_alias.heartbeat_ok_prod.name}"
-  statement_id = "heartbeat_ok_prod_apigateway"
 }

@@ -73,7 +73,7 @@ EOF
   resource_id = "${aws_api_gateway_resource.research_heartbeat_ok.id}"
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
   type = "AWS"
-  uri = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.aws_region}:${var.aws_account_id}:function:${aws_lambda_function.heartbeat_ok.function_name}:$${stageVariables.stage}/invocations"
+  uri = "arn:aws:apigateway:${var.aws_region}:lambda:path/2015-03-31/functions/arn:aws:lambda:${var.aws_region}:${var.aws_account_id}:function:${module.aws_lambda_function_for_apigateway_heartbeat_ok.function_name}:$${stageVariables.stage}/invocations"
 }
 
 resource "aws_api_gateway_method_response" "research_heartbeat_ok_get_200" {
