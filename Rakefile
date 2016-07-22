@@ -8,7 +8,7 @@ require 'tempfile'
 aws_lambdas = {
   'get_random' => 'crud_random',
   'heartbeat_ok' => 'heartbeat_ok',
-  'put_random' => 'crud_random',
+  'put_random' => 'crud_random'
 }
 
 def peco(items)
@@ -86,5 +86,6 @@ namespace :test do
   task :lint do
     sh 'bundle exec rubocop'
     sh 'flake8 aws_lambda'
+    Dir.chdir('terraform') { sh 'terraform validate' }
   end
 end
