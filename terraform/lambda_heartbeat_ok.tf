@@ -18,7 +18,7 @@ EOF
 
 module "aws_lambda_function_for_apigateway_heartbeat_ok" {
   source = "./modules/aws_lambda_function_for_apigateway"
-  description = "Get the code."
+  description = "Dummy heartbeat endpoint."
   filename = "../aws_lambda/heartbeat_ok.zip"
   function_name = "heartbeat_ok"
   handler = "main.main"
