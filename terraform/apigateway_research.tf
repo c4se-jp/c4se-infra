@@ -189,7 +189,7 @@ resource "aws_api_gateway_integration_response" "research_random_id_get_400" {
 EOF
   }
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
-  selection_pattern = "400:.+"
+  selection_pattern = "400: .+"
   status_code = "${aws_api_gateway_method_response.research_random_id_get_400.status_code}"
 }
 
@@ -200,12 +200,12 @@ resource "aws_api_gateway_integration_response" "research_random_id_get_500" {
   response_templates = {
     "application/json" = <<EOF
 {
-  "error": "$input.path('$.errorMessage')"
+  "error": "$input.path('$.errorMessage').substring(5)"
 }
 EOF
   }
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
-  selection_pattern = "(?<!\\d{3}: ).+"
+  selection_pattern = "500: .+"
   status_code = "${aws_api_gateway_method_response.research_random_id_get_500.status_code}"
 }
 
@@ -267,6 +267,7 @@ resource "aws_api_gateway_integration_response" "research_random_id_put_200" {
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
   status_code = "${aws_api_gateway_method_response.research_random_id_put_200.status_code}"
 }
+
 resource "aws_api_gateway_integration_response" "research_random_id_put_400" {
   depends_on = ["aws_api_gateway_integration.research_random_id_put"]
   http_method = "${aws_api_gateway_method.research_random_id_put.http_method}"
@@ -279,7 +280,7 @@ resource "aws_api_gateway_integration_response" "research_random_id_put_400" {
 EOF
   }
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
-  selection_pattern = "400:.+"
+  selection_pattern = "400: .+"
   status_code = "${aws_api_gateway_method_response.research_random_id_put_400.status_code}"
 }
 
@@ -290,12 +291,12 @@ resource "aws_api_gateway_integration_response" "research_random_id_put_500" {
   response_templates = {
     "application/json" = <<EOF
 {
-  "error": "$input.path('$.errorMessage')"
+  "error": "$input.path('$.errorMessage').substring(5)"
 }
 EOF
   }
   rest_api_id = "${aws_api_gateway_rest_api.research.id}"
-  selection_pattern = "(?<!\\d{3}: ).+"
+  selection_pattern = "500: .+"
   status_code = "${aws_api_gateway_method_response.research_random_id_put_500.status_code}"
 }
 

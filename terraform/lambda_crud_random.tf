@@ -46,7 +46,7 @@ module "aws_lambda_function_for_apigateway_get_random" {
   function_name = "get_random"
   handler = "get_random.main"
   memory_size = 128
-  prod_function_version = "3"
+  prod_function_version = "4"
   role = "${aws_iam_role.lambda_crud_random_exec.arn}"
   runtime = "python2.7"
   timeout = 3
@@ -59,7 +59,7 @@ module "aws_lambda_function_for_apigateway_put_random" {
   function_name = "put_random"
   handler = "put_random.main"
   memory_size = 128
-  prod_function_version = "3"
+  prod_function_version = "4"
   role = "${aws_iam_role.lambda_crud_random_exec.arn}"
   runtime = "python2.7"
   timeout = 3

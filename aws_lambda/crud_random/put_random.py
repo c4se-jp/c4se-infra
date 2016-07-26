@@ -41,4 +41,7 @@ def main(event, context):
         }
     except Exception as e:
         logger.error("%s\n%s" % (e, traceback.format_exc()))
-        raise
+        m = re.match(r"\A\d{3}: ", e.__str__())
+        if (not m) or (m and m.group(0)[0:3] not in ["400", "500"]):
+            e = Exception("500: %s" % e)
+        raise e
