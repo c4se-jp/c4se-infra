@@ -88,7 +88,7 @@ namespace :test do
   desc 'Lint.'
   task :lint do
     sh 'bundle exec rubocop'
-    sh 'flake8 aws_lambda'
+    Dir.chdir('aws_lambda') { sh 'flake8' }
     Dir.chdir 'terraform' do
       sh 'terraform validate'
       Dir['modules/*/'].each { |dir| sh "terraform validate #{dir}" }
