@@ -1,9 +1,12 @@
+# frozen_string_literal: true
 require 'base64'
 require 'digest'
 require 'fileutils'
 require 'json'
+require 'net/http'
 require 'shellwords'
 require 'tempfile'
+require 'uri'
 
 aws_lambdas = {
   'get_random' => 'crud_random',
@@ -78,7 +81,7 @@ namespace :deploy do
       begin
         Bundler.with_clean_env { sh 'terraform apply terraform.tfplan' }
       ensure
-        sh 'rm terraform.tfplan'
+        FileUtils.rm_f 'terraform.tfplan'
       end
     end
   end
@@ -93,5 +96,26 @@ namespace :test do
       sh 'terraform validate'
       Dir['modules/*/'].each { |dir| sh "terraform validate #{dir}" }
     end
+  end
+end
+
+namespace :update do
+  desc 'Update rubygems.'
+  task(:gem) { sh 'bundle update' }
+
+  desc 'Update .gitignore'
+  task :gitignore do
+    gitignore = File.read '.gitignore', encoding: Encoding::UTF_8
+    url = %r{\n# Created by (https://www\.gitignore\.io/api/.+)$}.match(gitignore)&.send(:[], 1)&.chomp
+    next unless url
+    res = Net::HTTP.get URI(url)
+    gitignore = gitignore.sub %r{\n# Created by https://www\.gitignore\.io/api/.+}m, res
+    File.write '.gitignore', gitignore, encoding: Encoding::UTF_8
+  end
+
+  desc 'Update npm.'
+  task :npm do
+    sh 'node_modules/npm-check-updates/bin/ncu -u'
+    sh 'npm update'
   end
 end

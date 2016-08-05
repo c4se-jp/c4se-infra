@@ -1,0 +1,28 @@
+{
+  "name": "c4se-infra",
+  "version": "1.0.0",
+  "description": "c4se's infrastructure code.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ne-sachirou/c4se-infra.git"
+  },
+  "keywords": [
+    "infrastructure"
+  ],
+  "author": "Sachiro Inoue <utakata.c4se@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/ne-sachirou/c4se-infra/issues"
+  },
+  "homepage": "https://github.com/ne-sachirou/c4se-infra#readme",
+  "dependencies": {
+    "serverless": "^0.5.6"
+  },
+  "devDependencies": {
+    "npm-check-updates": "^2.8.0"
+  }
+}

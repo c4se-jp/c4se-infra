@@ -25,12 +25,3 @@ resource "aws_route53_record" "primary_root_a_record" {
   type = "A"
   zone_id = "${aws_route53_zone.primary.zone_id}"
 }
-
-resource "aws_iam_policy_attachment" "AWSLambdaExecute" {
-  name = "AWSLambdaExecute"
-  policy_arn = "arn:aws:iam::aws:policy/AWSLambdaExecute"
-  roles = [
-    "${aws_iam_role.lambda_crud_random_exec.name}",
-    "${aws_iam_role.lambda_heartbeat_ok_exec.name}"
-  ]
-}

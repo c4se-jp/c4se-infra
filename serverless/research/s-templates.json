@@ -1,0 +1,13 @@
+{
+  "defaultRequestTemplates": {
+    "application/json": {
+      "httpMethod": "$context.httpMethod",
+      "stage": "$stageVariables.functionAlias"
+    }
+  },
+  "errorResponseTemplates": {
+    "application/json;charset=UTF-8": {
+      "error": "$input.path('$.errorMessage').substring(5)"
+    }
+  }
+}

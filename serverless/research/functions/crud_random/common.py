@@ -8,6 +8,14 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 
+class EventValidationException(Exception):
+    """Fail to validate event."""
+
+    def __str__(self):
+        """To string."""
+        return "400: %s" % self.message
+
+
 class Random(object):
     """Item of random table."""
 
