@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "function" {
-  description = "Get the code."
+  description = "${var.description}"
   filename = "${var.filename}"
   function_name = "${var.function_name}"
   handler = "${var.handler}"
