@@ -101,19 +101,19 @@ resource "aws_nat_gateway" "main_jobs_az1" {
 }
 
 resource "aws_route_table" "main_jobs_az0" {
-  vpc_id = "${aws_vpc.main.id}"
   route {
     cidr_block = "0.0.0.0/0"
     nat_gateway_id = "${aws_nat_gateway.main_jobs_az0.id}"
   }
+  vpc_id = "${aws_vpc.main.id}"
 }
 
 resource "aws_route_table" "main_jobs_az1" {
-  vpc_id = "${aws_vpc.main.id}"
   route {
     cidr_block = "0.0.0.0/0"
     nat_gateway_id = "${aws_nat_gateway.main_jobs_az1.id}"
   }
+  vpc_id = "${aws_vpc.main.id}"
 }
 
 resource "aws_route_table_association" "main_jobs_az0" {

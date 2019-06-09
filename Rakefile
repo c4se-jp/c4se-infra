@@ -87,17 +87,23 @@ namespace :deploy do
   end
 end
 
+desc 'Run all test tasks.'
+task test: ['test:lint']
+
 namespace :test do
   desc 'Lint.'
   task :lint do
     sh 'bundle exec rubocop'
-    Dir.chdir('aws_lambda') { sh 'flake8' }
-    Dir.chdir 'terraform' do
+    Dir.chdir("#{__dir__}/serverless") { sh 'flake8' }
+    Dir.chdir "#{__dir__}/terraform" do
       sh 'terraform validate'
       Dir['modules/*/'].each { |dir| sh "terraform validate #{dir}" }
     end
   end
 end
+
+desc 'Update all.'
+task update: ['update:gem', 'update:gitignore', 'update:npm']
 
 namespace :update do
   desc 'Update rubygems.'
