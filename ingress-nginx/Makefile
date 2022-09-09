@@ -8,7 +8,7 @@ INGRESS_NGINX_VERSION=v1.3.1
 
 .PHONY: deploy
 deploy: ## Deploy
-	cat *.yaml | kubectl apply -n ingress-nginx --prune --all -f -
+	cat deploy.yaml | kubectl apply -n ingress-nginx -l app.kubernetes.io/instance=ingress-nginx --prune -f -
 
 .PHONY: format
 format: ## Format
@@ -21,4 +21,3 @@ test: ## Test
 .PNONY: upgrade
 upgrade: ## Upgrade
 	curl -L "https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-$(INGRESS_NGINX_VERSION)/deploy/static/provider/cloud/deploy.yaml" > deploy.yaml
-	#kubectl apply -n ingress-nginx -l app.kubernetes.io/instance=ingress-nginx --prune -f deploy.yaml

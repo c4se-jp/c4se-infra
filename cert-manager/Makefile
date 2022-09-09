@@ -8,7 +8,7 @@ CERT_MANAGER_VERSION=v1.9.1
 
 .PHONY: deploy
 deploy: ## Deploy
-	cat *.yaml | kubectl apply -n cert-manager --prune --all -f -
+	cat cert-manager.yaml | kubectl apply -l app.kubernetes.io/instance=cert-manager --prune -f -
 
 .PHONY: format
 format: ## Format
@@ -21,4 +21,3 @@ test: ## Test
 .PHONY: upgrade
 upgrade: ## Upgrade
 	curl -L "https://github.com/jetstack/cert-manager/releases/download/$(CERT_MANAGER_VERSION)/cert-manager.yaml" > cert-manager.yaml
-	#kubectl apply -l app.kubernetes.io/instance=cert-manager --prune -f cert-manager.yaml
