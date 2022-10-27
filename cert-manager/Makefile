@@ -4,7 +4,7 @@ SHELL=/bin/bash
 help:
 	@awk -F':.*##' '/^[-_a-zA-Z0-9]+:.*##/{printf"%-12s\t%s\n",$$1,$$2}' $(MAKEFILE_LIST) | sort
 
-CERT_MANAGER_VERSION=v1.9.1
+CERT_MANAGER_VERSION=v1.10.0
 
 .PHONY: deploy
 deploy: ## Deploy
