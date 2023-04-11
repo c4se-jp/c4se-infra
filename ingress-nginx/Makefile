@@ -4,10 +4,11 @@ SHELL=/bin/bash
 help:
 	@awk -F':.*##' '/^[-_a-zA-Z0-9]+:.*##/{printf"%-12s\t%s\n",$$1,$$2}' $(MAKEFILE_LIST) | sort
 
-INGRESS_NGINX_VERSION=v1.4.0
+INGRESS_NGINX_VERSION=v1.7.0
 
 .PHONY: deploy
 deploy: ## Deploy
+	kubectl create ns ingress-nginx
 	cat deploy.yaml | kubectl apply -n ingress-nginx -l app.kubernetes.io/instance=ingress-nginx --prune -f -
 
 .PHONY: format
