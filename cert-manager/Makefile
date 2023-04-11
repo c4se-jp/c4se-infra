@@ -4,10 +4,12 @@ SHELL=/bin/bash
 help:
 	@awk -F':.*##' '/^[-_a-zA-Z0-9]+:.*##/{printf"%-12s\t%s\n",$$1,$$2}' $(MAKEFILE_LIST) | sort
 
-CERT_MANAGER_VERSION=v1.10.0
+CERT_MANAGER_VERSION=v1.11.1
 
 .PHONY: deploy
 deploy: ## Deploy
+	# kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user="$(gcloud config get-value core/account)"
+	# kubectl create ns cert-manager
 	cat cert-manager.yaml | kubectl apply -l app.kubernetes.io/instance=cert-manager --prune -f -
 
 .PHONY: format
