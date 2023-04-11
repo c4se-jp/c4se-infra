@@ -13,8 +13,6 @@ format-ingress-nginx:
 	$(MAKE) -C ingress-nginx format
 format-kube-state-metrics:
 	$(MAKE) -C kube-state-metrics format
-format-kube-system:
-	$(MAKE) -C kube-system format
 
 .PHONY: test test-cert-manager test-ingress-nginx test-kube-state-metrics test-kube-system
 test: test-cert-manager test-ingress-nginx test-kube-state-metrics test-kube-system ## Test
@@ -26,5 +24,3 @@ test-ingress-nginx:
 	$(MAKE) -C ingress-nginx test
 test-kube-state-metrics:
 	$(MAKE) -C kube-state-metrics test
-test-kube-system:
-	$(MAKE) -C kube-system test
