@@ -9,7 +9,7 @@ CERT_MANAGER_VERSION=v1.11.1
 .PHONY: deploy
 deploy: ## Deploy
 	# kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user="$(gcloud config get-value core/account)"
-	# kubectl create ns cert-manager
+	kubectl create ns cert-manager || true
 	cat cert-manager.yaml | kubectl apply -l app.kubernetes.io/instance=cert-manager --prune -f -
 
 .PHONY: format

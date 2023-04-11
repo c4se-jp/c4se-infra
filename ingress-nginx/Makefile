@@ -8,7 +8,7 @@ INGRESS_NGINX_VERSION=v1.7.0
 
 .PHONY: deploy
 deploy: ## Deploy
-	kubectl create ns ingress-nginx
+	kubectl create ns ingress-nginx || true
 	cat deploy.yaml | kubectl apply -n ingress-nginx -l app.kubernetes.io/instance=ingress-nginx --prune -f -
 
 .PHONY: format
