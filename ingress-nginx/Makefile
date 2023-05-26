@@ -4,7 +4,7 @@ SHELL=/bin/bash
 help:
 	@awk -F':.*##' '/^[-_a-zA-Z0-9]+:.*##/{printf"%-12s\t%s\n",$$1,$$2}' $(MAKEFILE_LIST) | sort
 
-INGRESS_NGINX_VERSION=v1.7.0
+INGRESS_NGINX_VERSION=v1.7.1
 
 .PHONY: deploy
 deploy: ## Deploy
